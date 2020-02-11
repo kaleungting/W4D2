@@ -18,15 +18,20 @@ class Board
     end
   end
 
-  def [](pos)
+  def valid_pos?(pos)
     r, c = pos
     raise "Invalid position coordinates" if r >= 8 || r < 0 || c >= 8 || c < 0
+  end
+
+  def [](pos)
+    valid_pos?(pos)
+    r, c = pos
     rows[r][c]
   end
 
   def []=(pos, piece)
+    valid_pos?(pos)
     r, c = pos
-    raise "Invalid position coordinates" if r >= 8 || r < 0 || c >= 8 || c < 0
     rows[r][c] = piece
   end
 
