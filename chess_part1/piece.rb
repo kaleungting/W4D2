@@ -26,14 +26,16 @@ class Piece
 
   def valid_moves
     # array of where things can move
-    moves = []
-    (0...8).each do |r|
-      (0...8).each do |c|
-        pos = [r, c]
-        moves << pos if board[pos].color != self.color
-      end
-    end
-    moves
+    # moves = []
+    # (0...8).each do |r|
+    #   (0...8).each do |c|
+    #     pos = [r, c]
+    #     moves << pos if board[pos].color != self.color
+    #   end
+    # end
+    # moves
+
+
   end
 
   def symbol
@@ -152,7 +154,7 @@ class Pawn < Piece
     r, c = pos
     steps = (at_start_row? ? [[r + forward_dir * 2, c], [r + forward_dir, c]] : [[r + forward_dir, c]])
     steps.select do |dir|
-      valid_moves.include?(dir) &&
+      board[dir].color != self.color && r.between?(0, 7) && c.between?(0, 7) &&
       board[dir].color == :blank
     end
   end
@@ -160,7 +162,7 @@ class Pawn < Piece
   def side_attacks
     r, c = pos
     [[r + forward_dir, c + 1], [r + forward_dir, c - 1]].select do |dir|
-      valid_moves.include?(dir) && 
+      board[dir].color != self.color && r.between?(0, 7) && c.between?(0, 7) &&
       board[dir].color != :blank && 
       board[dir].color != self.color
     end

@@ -4,10 +4,14 @@ class Board
   attr_reader :rows
   BACK_ROW = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
 
-  def initialize
+  def initialize(fill = true)
     @sentinel = NullPiece.instance
     @rows = Array.new(8) { Array.new(8, @sentinel) }
-    fill_board
+    fill_board if fill
+  end
+
+  def self.empty_board
+    Board.new(false)
   end
 
   def fill_board
@@ -25,6 +29,44 @@ class Board
       end
     end
   end
+
+  def in_check?(color)
+    # find king position for given color
+    king = rows.flatten.find do |piece|
+      piece.color == color && piece.class == King
+    end
+    king_pos = king.pos
+
+    # identify all opponent pieces
+    opponents = rows.flatten.select do |piece|
+      piece.color != color && piece != sentinel
+    end
+
+    opponents.any? do |opponent|
+      opponent.moves.include?(king_pos)
+    end
+  end
+
+  def checkmate?(color)
+
+  end
+
+  def dup
+    new_board = Board.empty_board
+    (0...8).each do |r|
+      (0...8).each do |c|
+        pos = [r, c]
+        if self[pos] == sentinel
+          new_board[pos] = sentinel
+        else
+          color = self[pos].color
+          new_board[pos] = self[pos].class.new(color, new_board, pos)
+        end
+      end
+    end
+    new_board
+  end
+
 
   def valid_pos?(pos)
     r, c = pos

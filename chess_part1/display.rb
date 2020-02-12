@@ -27,6 +27,7 @@ class Display
 end
 
 b = Board.new
+b.move_piece([7, 4], [2, 3])
 d = Display.new(b)
 while true
   system("clear")

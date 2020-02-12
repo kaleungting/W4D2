@@ -6,7 +6,9 @@ module Steppable
       [r + dr, c + dc] 
     end
     potential_moves.select do |move|
-      valid_moves.include?(move)
+      # valid_moves.include?(move)
+      r, c = move
+      board[move].color != self.color && r.between?(0, 7) && c.between?(0, 7)
     end
   end
 
