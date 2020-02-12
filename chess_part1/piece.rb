@@ -133,7 +133,7 @@ class Pawn < Piece
     :p
   end
 
-  def move_dirs
+  def moves
     forward_steps + side_attacks
   end
 
