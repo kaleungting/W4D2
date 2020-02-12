@@ -150,7 +150,8 @@ class Pawn < Piece
 
   def forward_steps
     r, c = pos
-    [[r + forward_dir * 2, c], [r + forward_dir, c]].select do |dir|
+    steps = (at_start_row? ? [[r + forward_dir * 2, c], [r + forward_dir, c]] : [[r + forward_dir, c]])
+    steps.select do |dir|
       valid_moves.include?(dir) &&
       board[dir].color == :blank
     end

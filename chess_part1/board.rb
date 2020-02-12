@@ -2,17 +2,25 @@ require_relative "piece"
 
 class Board
   attr_reader :rows
+  BACK_ROW = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
+
   def initialize
-    @rows = Array.new(8) { Array.new(8) }
     @sentinel = NullPiece.instance
+    @rows = Array.new(8) { Array.new(8, @sentinel) }
+    fill_board
+  end
+
+  def fill_board
     (0...rows.length).each do |r|
       (0...rows.length).each do |c|
-        if r == 1 || r == 0
-          @rows[r][c] = Piece.new(:black, self, [r, c])
-        elsif r == 7 || r == 6
-          @rows[r][c] = Piece.new(:white, self, [r, c])
-        else
-          @rows[r][c] = @sentinel
+        if r == 1
+          @rows[r][c] = Pawn.new(:black, self, [r, c])
+        elsif r == 6
+          @rows[r][c] = Pawn.new(:white, self, [r, c])
+        elsif r == 0
+          @rows[r][c] = BACK_ROW[c].new(:black, self, [r, c])
+        elsif r == 7
+          @rows[r][c] = BACK_ROW[c].new(:white, self, [r, c])
         end
       end
     end
