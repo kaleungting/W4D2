@@ -1,4 +1,5 @@
 require "singleton"
+require "colorize"
 require_relative "slideable"
 require_relative "steppable"
 
@@ -10,7 +11,13 @@ class Piece
   end
 
   def to_s
-
+    if self.color == :white
+      symbol.to_s.colorize(:white)
+    elsif self.color == :black
+      symbol.to_s.colorize(:light_blue)
+    else
+      symbol.to_s.colorize(:grey)
+    end
   end
 
   def empty?
@@ -47,7 +54,7 @@ class Rook < Piece
 
   protected
   def move_dirs
-
+    :horizontal
   end
 end
 
@@ -60,7 +67,7 @@ class Bishop < Piece
 
   protected
   def move_dirs
-    
+    :diagonal
   end
 end
 
@@ -73,7 +80,7 @@ class Queen < Piece
 
   protected
   def move_dirs
-    
+    :all_dirs
   end
 end
 
@@ -93,7 +100,7 @@ class Knight < Piece
       [2, -1],
       [1, 2],
       [1, -2],
-      [-1, 2]
+      [-1, 2],
       [-1, -2]
     ]
   end
