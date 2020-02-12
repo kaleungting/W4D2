@@ -48,7 +48,10 @@ class Board
   end
 
   def checkmate?(color)
-
+    pieces = rows.flatten.select do |piece|
+      piece.color == color
+    end
+    pieces.all? { |piece| piece.valid_moves.empty? }
   end
 
   def dup

@@ -34,8 +34,7 @@ class Piece
     #   end
     # end
     # moves
-
-
+    moves.reject { |move| move_into_check?(move) } 
   end
 
   def symbol
@@ -43,8 +42,10 @@ class Piece
 
   private
   def move_into_check?(end_pos)
+    new_board = board.dup
+    new_board.move_piece(pos, end_pos)
+    new_board.in_check?(self.color)
   end
-
 end
 
 class Rook < Piece
