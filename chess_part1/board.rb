@@ -4,7 +4,7 @@ class Board
   attr_reader :rows
   def initialize
     @rows = Array.new(8) { Array.new(8) }
-    @sentinel = nil
+    @sentinel = NullPiece.instance
     (0...rows.length).each do |r|
       (0...rows.length).each do |c|
         if r == 1 || r == 0

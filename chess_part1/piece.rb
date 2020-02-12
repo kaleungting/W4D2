@@ -1,3 +1,4 @@
+require "singleton"
 require_relative "slideable"
 require_relative "steppable"
 
@@ -13,20 +14,26 @@ class Piece
   end
 
   def empty?
-
+    color == :blank
   end
 
   def valid_moves
-  
+    # array of where things can move
+    moves = []
+    (0...8).each do |r|
+      (0...8).each do |c|
+        pos = [r, c]
+        moves << pos if board[pos].color != self.color
+      end
+    end
+    moves
   end
 
   def symbol
-
   end
 
   private
   def move_into_check?(end_pos)
-  
   end
 
 end
@@ -78,8 +85,17 @@ class Knight < Piece
   end
 
   protected
-  def move_dirs
-    
+  def move_diffs
+    [
+      [-2, 1],
+      [-2,-1],
+      [2, 1],
+      [2, -1],
+      [1, 2],
+      [1, -2],
+      [-1, 2]
+      [-1, -2]
+    ]
   end
 end
 
@@ -91,8 +107,17 @@ class King < Piece
   end
 
   protected
-  def move_dirs
-    
+  def move_diffs
+    [
+      [-1,-1],
+      [-1, 0],
+      [-1, 1],
+      [0, -1],
+      [0, 1],
+      [1, -1],
+      [1, 0],
+      [1, 1]
+    ]
   end
 end
 
@@ -102,31 +127,42 @@ class Pawn < Piece
   end
 
   def move_dirs
-    
+    forward_steps + side_attacks
   end
 
   private
   def at_start_row?
-
+    r, c = pos
+    (color == :black && r == 1) || (color == :white && r == 6)
   end
 
   def forward_dir
-
+    return 1 if color == :black
+    return -1 if color == :white
   end
 
   def forward_steps
-
+    r, c = pos
+    [[r + forward_dir * 2, c], [r + forward_dir, c]].select do |dir|
+      valid_moves.include?(dir) &&
+      board[dir].color == :blank
+    end
   end
 
   def side_attacks
-
+    r, c = pos
+    [[r + forward_dir, c + 1], [r + forward_dir, c - 1]].select do |dir|
+      valid_moves.include?(dir) && 
+      board[dir].color != :blank && 
+      board[dir].color != self.color
+    end
   end
 end
 
 class NullPiece < Piece
   include Singleton
   def initialize
-
+    @color = :blank
   end
 
   def symbol
